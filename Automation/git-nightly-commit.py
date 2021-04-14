@@ -44,25 +44,53 @@ def stge_cmt_and_psh_w_subproc(branch_name, repo_path, commit_desc):
 
 
 def stge_cmt_and_psh_all(branch_names, path_list, commit_desc):
-    for branch, path in zip(branch_names, path_list):
+    """This will stage, commit, and push multiple repos to their
+    origins.
+
+    Arguments:
+        branch_names -- List of branch names.
+        path_list    -- List of repo paths.
+        commit_desc  -- Commit description. Will be used for all repos.
+    """
+    print("Beginning repo iteration...")
+    for i, (branch, path) in enumerate(zip(branch_names, path_list)):
+        i_mod = ""
+        cur_pass = i + 1
+
+        if cur_pass == 1:
+            i_mod = "st"
+        elif cur_pass == 2:
+            i_mod = "nd"
+        elif cur_pass == 3:
+            i_mod = "rd"
+        else:
+            i_mod = "th"
+
+        i_str = f"{i+1}{i_mod}"
+
+        print(f"Staging all changes for the {i_str} repo...")
         args = [GIT, ADD, "-A"]
         Popen(args, cwd=path)
 
+        print(f"Committing staged changes for the {i_str} repo...")
         args = [GIT, COMMIT, "-a", "-m", commit_desc]
         Popen(args, cwd=path)
 
+        print(f"Pushing the {i_str} repo to origin...")
         args = [GIT, PUSH, ORIGIN, branch]
         Popen(args, cwd=path)
+    else:
+        print("All repos have been staged, committed, and pushed!")
 
 
 if __name__ == "__main__":
-    args = sys.argv
-    if len(args) >= 1:
+    cmd = sys.argv
+    if len(cmd) >= 1:
         print("No arguments given.")
         exit()
 
-    if len(args) > 4:
+    if len(cmd) > 4:
         print("Too many arguments given.")
         exit()
 
-    stge_cmt_and_psh_w_subproc(args[1], args[2], args[3])
+    stge_cmt_and_psh_w_subproc(cmd[1], cmd[2], cmd[3])
