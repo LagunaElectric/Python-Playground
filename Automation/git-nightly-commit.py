@@ -17,6 +17,14 @@ OR = "origin"
 
 # This will stage, commit, and push branch_name to repo_path with commit_desc.
 def stage_commit_and_push_with_subproc(branch_name, repo_path, commit_desc):
+    """This will stage, commit, and push branch_name to
+    repo_path with commit_desc.
+
+    Arguments:
+        branch_name -- Name of the branch we're working with.
+        repo_path   -- Path to the git repo we're working with.
+        commit_desc -- A description for the commit.
+    """
     args = [G, A, "-A"]
     Popen(args, cwd=repo_path)
 
@@ -32,7 +40,9 @@ if __name__ == "__main__":
     if len(args) >= 1:
         print("No arguments given.")
         exit()
+
     if len(args) > 4:
         print("Too many arguments given.")
         exit()
-    stage_commit_and_push_with_subproc()
+
+    stage_commit_and_push_with_subproc(args[1], args[2], args[3])
