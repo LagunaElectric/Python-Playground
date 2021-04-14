@@ -51,7 +51,7 @@ def stge_cmt_and_psh_all(branch_names, path_list, commit_desc):
         args = [GIT, COMMIT, "-a", "-m", commit_desc]
         Popen(args, cwd=path)
 
-        args = [GIT, PUSH, ORIGIN, branch_names[]]
+        args = [GIT, PUSH, ORIGIN, branch_names[]
         Popen(args, cwd=path)
 
 
