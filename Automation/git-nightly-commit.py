@@ -1,6 +1,7 @@
 # Function to be called to stage and push a single commit.
 
 # Import the subprocess module so we can use Popen.
+import os
 import sys
 from subprocess import Popen
 
@@ -14,7 +15,11 @@ PULL = "pull"
 ORIGIN = "origin"
 
 
-def stage_commit_and_push_with_subproc(branch_name, repo_path, commit_desc):
+def get_local_repo_paths():
+    pass
+
+
+def stge_cmt_and_psh_w_subproc(branch_name, repo_path, commit_desc):
     """This will stage, commit, and push branch_name to
     repo_path with commit_desc.
 
@@ -23,14 +28,31 @@ def stage_commit_and_push_with_subproc(branch_name, repo_path, commit_desc):
         repo_path   -- Path to the git repo we're working with.
         commit_desc -- A description for the commit.
     """
+    print("Staging all changes...")
     args = [GIT, ADD, "-A"]
     Popen(args, cwd=repo_path)
 
+    print("Committing staged changes...")
     args = [GIT, COMMIT, "-a", "-m", commit_desc]
     Popen(args, cwd=repo_path)
 
+    print("Pushing to origin...")
     args = [GIT, PUSH, ORIGIN, branch_name]
     Popen(args, cwd=repo_path)
+
+    print("Done!")
+
+
+def stge_cmt_and_psh_all(branch_names, path_list, commit_desc):
+    for path in path_list:
+        args = [GIT, ADD, "-A"]
+        Popen(args, cwd=path)
+
+        args = [GIT, COMMIT, "-a", "-m", commit_desc]
+        Popen(args, cwd=path)
+
+        args = [GIT, PUSH, ORIGIN, branch_names[]]
+        Popen(args, cwd=path)
 
 
 if __name__ == "__main__":
@@ -43,4 +65,4 @@ if __name__ == "__main__":
         print("Too many arguments given.")
         exit()
 
-    stage_commit_and_push_with_subproc(args[1], args[2], args[3])
+    stge_cmt_and_psh_w_subproc(args[1], args[2], args[3])
