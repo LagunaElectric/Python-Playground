@@ -5,17 +5,15 @@ import sys
 from subprocess import Popen
 
 # Make some constants to make our typing life a litte easier.
-G = "git"
-A = "add"
-C = "commit"
-PSH = "push"
-PL = "pull"
-OR = "origin"
+REPO_EXT = ".git"
+GIT = "git"
+ADD = "add"
+COMMIT = "commit"
+PUSH = "push"
+PULL = "pull"
+ORIGIN = "origin"
 
-# This particular method is using the subprocess module.
 
-
-# This will stage, commit, and push branch_name to repo_path with commit_desc.
 def stage_commit_and_push_with_subproc(branch_name, repo_path, commit_desc):
     """This will stage, commit, and push branch_name to
     repo_path with commit_desc.
@@ -25,13 +23,13 @@ def stage_commit_and_push_with_subproc(branch_name, repo_path, commit_desc):
         repo_path   -- Path to the git repo we're working with.
         commit_desc -- A description for the commit.
     """
-    args = [G, A, "-A"]
+    args = [GIT, ADD, "-A"]
     Popen(args, cwd=repo_path)
 
-    args = [G, C, "-a", "-m", commit_desc]
+    args = [GIT, COMMIT, "-a", "-m", commit_desc]
     Popen(args, cwd=repo_path)
 
-    args = [G, PSH, OR, branch_name]
+    args = [GIT, PUSH, ORIGIN, branch_name]
     Popen(args, cwd=repo_path)
 
 
