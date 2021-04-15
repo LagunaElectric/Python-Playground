@@ -15,7 +15,20 @@ ORIGIN = "origin"
 
 
 def get_local_repo_paths():
-    pass
+    # Grab a list of subdirs immediately inside the current working dir.
+    paths = next(os.walk(os.getcwd()))[1]
+    repo_paths = []
+
+    for path in paths:
+        # Grab a list of subdirs immediately inside the given path.
+        sub_paths = next(os.walk(path))[1]
+        for sub_path in sub_paths:
+            if sub_path == ".git":
+                # This will find all dirs that contain .git folders
+                # and add them to the repo_paths list.
+                repo_paths.append(f"{os.getcwd()}\\{path}")
+
+    return repo_paths
 
 
 def push_repo(branch_name, repo_path, commit_desc):
@@ -86,7 +99,6 @@ def push_repos(branch_names, path_list, commit_desc):
     else:
         print()
         print("All repos have been staged, committed, and pushed!")
-        # print("Iteration complete.")
 
 
 if __name__ == "__main__":
@@ -96,23 +108,9 @@ if __name__ == "__main__":
         if len(cmd) < 5:
             push_repo(cmd[1], os.path.normcase(cmd[2]), cmd[3])
         else:
-            print(
-                "Too many arguments. Expected: 3 args: branch_name repo_path commit_desc"
-            )
+            print("Too many args. Expected: 3 args")
     else:
-        # Grab a list of subdirs immediately inside the current working dir.
-        paths = next(os.walk(os.getcwd()))[1]
-        repo_paths = []
-
-        for path in paths:
-            # Grab a list of subdirs immediately inside the given path.
-            sub_paths = next(os.walk(path))[1]
-            for sub_path in sub_paths:
-                if sub_path == ".git":
-                    # This will find all dirs that contain .git folders
-                    # and add them to the repo_paths list.
-                    repo_paths.append(f"{os.getcwd()}\\{path}")
-
+        repo_paths = get_local_repo_paths()
         # For testing, assume all branch names will be "master"
         branch_names = ["master"] * len(repo_paths)
 
