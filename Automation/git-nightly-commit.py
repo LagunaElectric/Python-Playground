@@ -104,4 +104,4 @@ if __name__ == "__main__":
         print("Too many arguments given.")
         exit()
 
-    stge_cmt_and_psh_w_subproc(cmd[1], cmd[2], cmd[3])
+    stge_cmt_and_psh_w_subproc(cmd[1], os.path.normcase(cmd[2]), cmd[3])
