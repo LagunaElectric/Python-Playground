@@ -51,10 +51,10 @@ def push_repos(branch_names, path_list, commit_desc):
         path_list    -- List of repo paths.
         commit_desc  -- Commit description. Will be used for all repos.
     """
-    print("\n")
+    print()
     print(f"Commit Description: {commit_desc}")
     print("Beginning repo iteration...")
-    print("\n")
+    print()
     for i, (branch, path) in enumerate(zip(branch_names, path_list), start=1):
         i_mod = ""
 
@@ -69,22 +69,22 @@ def push_repos(branch_names, path_list, commit_desc):
 
         i_str = f"{i}{i_mod}"
 
-        print("\n")
+        print()
         print(f"Staging all changes for the {i_str} repo...")
         args = [GIT, ADD, "-A"]
         subprocess.call(args, cwd=path)
 
-        print("\n")
+        print()
         print(f"Committing staged changes for the {i_str} repo...")
         args = [GIT, COMMIT, "-a", "-m", commit_desc]
         subprocess.call(args, cwd=path)
 
-        print("\n")
+        print()
         print(f"Pushing the {i_str} repo to origin...")
         args = [GIT, PUSH, ORIGIN, branch]
         subprocess.call(args, cwd=path)
     else:
-        print("\n")
+        print()
         print("All repos have been staged, committed, and pushed!")
         # print("Iteration complete.")
 
