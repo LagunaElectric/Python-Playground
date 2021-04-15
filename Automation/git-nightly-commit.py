@@ -19,9 +19,9 @@ def get_local_repo_paths():
     pass
 
 
-def stge_cmt_and_psh_w_subproc(branch_name, repo_path, commit_desc):
-    """This will stage, commit, and push branch_name to
-    repo_path with commit_desc.
+def push_repo(branch_name, repo_path, commit_desc):
+    """This will stage, commit, and push branch_name in
+    repo_path to it's origin with commit_desc.
 
     Arguments:
         branch_name -- Name of the branch we're working with.
@@ -43,7 +43,7 @@ def stge_cmt_and_psh_w_subproc(branch_name, repo_path, commit_desc):
     print("Done!")
 
 
-def stge_cmt_and_psh_all(branch_names, path_list, commit_desc):
+def push_repos(branch_names, path_list, commit_desc):
     """This will stage, commit, and push multiple repos to their
     origins.
 
@@ -87,7 +87,7 @@ def stge_cmt_and_psh_all(branch_names, path_list, commit_desc):
 
 
 if __name__ == "__main__":
-    # Testing stge_cmt_and_psh_all
+    # Testing push_repos
     """ branch_names = ["master"] * 5
     repo_paths = [os.path.normcase(os.getcwd())] * 5
 
@@ -104,4 +104,4 @@ if __name__ == "__main__":
         print("Too many arguments given.")
         exit()
 
-    stge_cmt_and_psh_w_subproc(cmd[1], os.path.normcase(cmd[2]), cmd[3])
+    push_repo(cmd[1], os.path.normcase(cmd[2]), cmd[3])
