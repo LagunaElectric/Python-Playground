@@ -2,7 +2,7 @@
 
 # Import the subprocess module so we can use Popen.
 import os
-import sys
+# import sys
 from subprocess import Popen
 
 # Make some constants to make our typing life a litte easier.
@@ -52,23 +52,25 @@ def stge_cmt_and_psh_all(branch_names, path_list, commit_desc):
         path_list    -- List of repo paths.
         commit_desc  -- Commit description. Will be used for all repos.
     """
+    print(f"Commit Description: {commit_desc}")
     print("Beginning repo iteration...")
-    for i, (branch, path) in enumerate(zip(branch_names, path_list)):
+    for i, (branch, path) in enumerate(zip(branch_names, path_list), start=1):
         i_mod = ""
-        cur_pass = i + 1
 
-        if cur_pass == 1:
+        if i == 1:
             i_mod = "st"
-        elif cur_pass == 2:
+        elif i == 2:
             i_mod = "nd"
-        elif cur_pass == 3:
+        elif i == 3:
             i_mod = "rd"
         else:
             i_mod = "th"
 
-        i_str = f"{i+1}{i_mod}"
+        i_str = f"{i}{i_mod}"
+        out_str = f"{i_str} Repo | Branch Name: '{branch}' | Path: '{path}'."
 
-        print(f"Staging all changes for the {i_str} repo...")
+        print(out_str)
+        """ print(f"Staging all changes for the {i_str} repo...")
         args = [GIT, ADD, "-A"]
         Popen(args, cwd=path)
 
@@ -78,13 +80,20 @@ def stge_cmt_and_psh_all(branch_names, path_list, commit_desc):
 
         print(f"Pushing the {i_str} repo to origin...")
         args = [GIT, PUSH, ORIGIN, branch]
-        Popen(args, cwd=path)
+        Popen(args, cwd=path) """
     else:
-        print("All repos have been staged, committed, and pushed!")
+        # print("All repos have been staged, committed, and pushed!")
+        print("Iteration complete.")
 
 
 if __name__ == "__main__":
-    cmd = sys.argv
+    branch_names = ["master"] * 5
+    repo_paths = [os.path.normcase(os.getcwd())] * 5
+
+    # print(branch_names, repo_paths)
+    stge_cmt_and_psh_all(branch_names, repo_paths, "Test Message")
+
+    """ cmd = sys.argv
     if len(cmd) >= 1:
         print("No arguments given.")
         exit()
@@ -93,4 +102,4 @@ if __name__ == "__main__":
         print("Too many arguments given.")
         exit()
 
-    stge_cmt_and_psh_w_subproc(cmd[1], cmd[2], cmd[3])
+    stge_cmt_and_psh_w_subproc(cmd[1], cmd[2], cmd[3]) """
