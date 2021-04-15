@@ -67,7 +67,6 @@ def push_repos(branch_names, path_list, commit_desc):
     print()
     print(f"Commit Description: {commit_desc}")
     print("Beginning repo iteration...")
-    print()
     for i, (branch, path) in enumerate(zip(branch_names, path_list), start=1):
         i_mod = ""
 
