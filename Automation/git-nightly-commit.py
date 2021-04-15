@@ -1,9 +1,8 @@
 # Function to be called to stage and push a single commit.
 
-# Import the subprocess module so we can use Popen.
 import os
 import sys
-from subprocess import Popen
+import subprocess
 
 # Make some constants to make our typing life a litte easier.
 REPO_EXT = ".git"
@@ -30,15 +29,15 @@ def push_repo(branch_name, repo_path, commit_desc):
     """
     print("Staging all changes...")
     args = [GIT, ADD, "-A"]
-    Popen(args, cwd=repo_path)
+    subprocess.call(args, cwd=repo_path)
 
     print("Committing staged changes...")
     args = [GIT, COMMIT, "-a", "-m", commit_desc]
-    Popen(args, cwd=repo_path)
+    subprocess.call(args, cwd=repo_path)
 
     print("Pushing to origin...")
     args = [GIT, PUSH, ORIGIN, branch_name]
-    Popen(args, cwd=repo_path)
+    subprocess.call(args, cwd=repo_path)
 
     print("Done!")
 
@@ -72,15 +71,15 @@ def push_repos(branch_names, path_list, commit_desc):
         print(out_str) """
         print(f"Staging all changes for the {i_str} repo...")
         args = [GIT, ADD, "-A"]
-        Popen(args, cwd=path)
+        subprocess.call(args, cwd=path)
 
         print(f"Committing staged changes for the {i_str} repo...")
         args = [GIT, COMMIT, "-a", "-m", commit_desc]
-        Popen(args, cwd=path)
+        subprocess.call(args, cwd=path)
 
         print(f"Pushing the {i_str} repo to origin...")
         args = [GIT, PUSH, ORIGIN, branch]
-        Popen(args, cwd=path)
+        subprocess.call(args, cwd=path)
     else:
         print("All repos have been staged, committed, and pushed!")
         # print("Iteration complete.")
@@ -107,13 +106,13 @@ if __name__ == "__main__":
     push_repos(branch_names, repo_paths, "Test Message")
 
     # Original code
-    """ cmd = sys.argv
-    if len(cmd) <= 1:
+    cmd = sys.argv
+    """ if len(cmd) <= 1:
         print("No arguments given.")
         exit()
 
     if len(cmd) > 4:
         print("Too many arguments given.")
-        exit()
-
-    push_repo(cmd[1], os.path.normcase(cmd[2]), cmd[3]) """
+        exit() """
+    if len(cmd) > 1 and len(cmd) < 5:
+        push_repo(cmd[1], os.path.normcase(cmd[2]), cmd[3])
