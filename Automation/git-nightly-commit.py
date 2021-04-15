@@ -2,7 +2,7 @@
 
 # Import the subprocess module so we can use Popen.
 import os
-# import sys
+import sys
 from subprocess import Popen
 
 # Make some constants to make our typing life a litte easier.
@@ -87,14 +87,16 @@ def stge_cmt_and_psh_all(branch_names, path_list, commit_desc):
 
 
 if __name__ == "__main__":
-    branch_names = ["master"] * 5
+    # Testing stge_cmt_and_psh_all
+    """ branch_names = ["master"] * 5
     repo_paths = [os.path.normcase(os.getcwd())] * 5
 
     # print(branch_names, repo_paths)
-    stge_cmt_and_psh_all(branch_names, repo_paths, "Test Message")
+    stge_cmt_and_psh_all(branch_names, repo_paths, "Test Message") """
 
-    """ cmd = sys.argv
-    if len(cmd) >= 1:
+    # Original code
+    cmd = sys.argv
+    if len(cmd) <= 1:
         print("No arguments given.")
         exit()
 
@@ -102,4 +104,4 @@ if __name__ == "__main__":
         print("Too many arguments given.")
         exit()
 
-    stge_cmt_and_psh_w_subproc(cmd[1], cmd[2], cmd[3]) """
+    stge_cmt_and_psh_w_subproc(cmd[1], cmd[2], cmd[3])
