@@ -51,8 +51,10 @@ def push_repos(branch_names, path_list, commit_desc):
         path_list    -- List of repo paths.
         commit_desc  -- Commit description. Will be used for all repos.
     """
+    print("\n")
     print(f"Commit Description: {commit_desc}")
     print("Beginning repo iteration...")
+    print("\n")
     for i, (branch, path) in enumerate(zip(branch_names, path_list), start=1):
         i_mod = ""
 
@@ -66,46 +68,30 @@ def push_repos(branch_names, path_list, commit_desc):
             i_mod = "th"
 
         i_str = f"{i}{i_mod}"
-        """ out_str = f"{i_str} Repo | Branch Name: '{branch}' | Path: '{path}'."
 
-        print(out_str) """
+        print("\n")
         print(f"Staging all changes for the {i_str} repo...")
         args = [GIT, ADD, "-A"]
         subprocess.call(args, cwd=path)
 
+        print("\n")
         print(f"Committing staged changes for the {i_str} repo...")
         args = [GIT, COMMIT, "-a", "-m", commit_desc]
         subprocess.call(args, cwd=path)
 
+        print("\n")
         print(f"Pushing the {i_str} repo to origin...")
         args = [GIT, PUSH, ORIGIN, branch]
         subprocess.call(args, cwd=path)
     else:
+        print("\n")
         print("All repos have been staged, committed, and pushed!")
         # print("Iteration complete.")
 
 
 if __name__ == "__main__":
-    # Grab a list of subdirs immediately inside the current working dir.
-    paths = next(os.walk(os.getcwd()))[1]
-    repo_paths = []
-
-    for path in paths:
-        # Grab a list of subdirs immediately inside the given path.
-        sub_paths = next(os.walk(path))[1]
-        for sub_path in sub_paths:
-            if sub_path == ".git":
-                # This will find all dirs that contain .git folders
-                # and add them to the repo_paths list.
-                repo_paths.append(f"{os.getcwd()}\\{path}")
-
-    # For testing, assume all branch names will be "master"
-    branch_names = ["master"] * len(repo_paths)
-
-    print(branch_names, repo_paths)
-    push_repos(branch_names, repo_paths, "Test Message")
-
     cmd = sys.argv
+
     if len(cmd) > 1:
         if len(cmd) < 5:
             push_repo(cmd[1], os.path.normcase(cmd[2]), cmd[3])
@@ -113,3 +99,22 @@ if __name__ == "__main__":
             print(
                 "Too many arguments. Expected: 3 args: branch_name repo_path commit_desc"
             )
+    else:
+        # Grab a list of subdirs immediately inside the current working dir.
+        paths = next(os.walk(os.getcwd()))[1]
+        repo_paths = []
+
+        for path in paths:
+            # Grab a list of subdirs immediately inside the given path.
+            sub_paths = next(os.walk(path))[1]
+            for sub_path in sub_paths:
+                if sub_path == ".git":
+                    # This will find all dirs that contain .git folders
+                    # and add them to the repo_paths list.
+                    repo_paths.append(f"{os.getcwd()}\\{path}")
+
+        # For testing, assume all branch names will be "master"
+        branch_names = ["master"] * len(repo_paths)
+
+        print(branch_names, repo_paths)
+        push_repos(branch_names, repo_paths, "Test Message")
