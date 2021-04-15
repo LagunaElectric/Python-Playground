@@ -67,10 +67,10 @@ def push_repos(branch_names, path_list, commit_desc):
             i_mod = "th"
 
         i_str = f"{i}{i_mod}"
-        out_str = f"{i_str} Repo | Branch Name: '{branch}' | Path: '{path}'."
+        """ out_str = f"{i_str} Repo | Branch Name: '{branch}' | Path: '{path}'."
 
-        print(out_str)
-        """ print(f"Staging all changes for the {i_str} repo...")
+        print(out_str) """
+        print(f"Staging all changes for the {i_str} repo...")
         args = [GIT, ADD, "-A"]
         Popen(args, cwd=path)
 
@@ -80,22 +80,34 @@ def push_repos(branch_names, path_list, commit_desc):
 
         print(f"Pushing the {i_str} repo to origin...")
         args = [GIT, PUSH, ORIGIN, branch]
-        Popen(args, cwd=path) """
+        Popen(args, cwd=path)
     else:
-        # print("All repos have been staged, committed, and pushed!")
-        print("Iteration complete.")
+        print("All repos have been staged, committed, and pushed!")
+        # print("Iteration complete.")
 
 
 if __name__ == "__main__":
-    # Testing push_repos
-    """ branch_names = ["master"] * 5
-    repo_paths = [os.path.normcase(os.getcwd())] * 5
+    # Grab a list of subdirs immediately inside the current working dir.
+    paths = next(os.walk(os.getcwd()))[1]
+    repo_paths = []
 
-    # print(branch_names, repo_paths)
-    stge_cmt_and_psh_all(branch_names, repo_paths, "Test Message") """
+    for path in paths:
+        # Grab a list of subdirs immediately inside the given path.
+        sub_paths = next(os.walk(path))[1]
+        for sub_path in sub_paths:
+            if sub_path == ".git":
+                # This will find all dirs that contain .git folders
+                # and add them to the repo_paths list.
+                repo_paths.append(f"{os.getcwd()}\\{path}")
+
+    # For testing, assume all branch names will be "master"
+    branch_names = ["master"] * len(repo_paths)
+
+    print(branch_names, repo_paths)
+    push_repos(branch_names, repo_paths, "Test Message")
 
     # Original code
-    cmd = sys.argv
+    """ cmd = sys.argv
     if len(cmd) <= 1:
         print("No arguments given.")
         exit()
@@ -104,4 +116,4 @@ if __name__ == "__main__":
         print("Too many arguments given.")
         exit()
 
-    push_repo(cmd[1], os.path.normcase(cmd[2]), cmd[3])
+    push_repo(cmd[1], os.path.normcase(cmd[2]), cmd[3]) """
