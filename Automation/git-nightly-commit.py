@@ -105,14 +105,11 @@ if __name__ == "__main__":
     print(branch_names, repo_paths)
     push_repos(branch_names, repo_paths, "Test Message")
 
-    # Original code
     cmd = sys.argv
-    """ if len(cmd) <= 1:
-        print("No arguments given.")
-        exit()
-
-    if len(cmd) > 4:
-        print("Too many arguments given.")
-        exit() """
-    if len(cmd) > 1 and len(cmd) < 5:
-        push_repo(cmd[1], os.path.normcase(cmd[2]), cmd[3])
+    if len(cmd) > 1:
+        if len(cmd) < 5:
+            push_repo(cmd[1], os.path.normcase(cmd[2]), cmd[3])
+        else:
+            print(
+                "Too many arguments. Expected: 3 args: branch_name repo_path commit_desc"
+            )
