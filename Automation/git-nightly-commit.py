@@ -20,7 +20,7 @@ def get_local_repo_paths():
     repo_paths = []
 
     for path in paths:
-        # Grab a list of subdirs immediately inside the given path.
+        # Grab a list of subdirectories immediately inside the given path.
         sub_paths = next(os.walk(path))[1]
         for sub_path in sub_paths:
             if sub_path == ".git":
