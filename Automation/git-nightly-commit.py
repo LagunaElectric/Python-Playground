@@ -31,7 +31,7 @@ def get_local_repo_paths():
     return repo_paths
 
 
-def push_repo(branch_name, repo_path, commit_desc):
+def stage_commit_push(commit_desc, branch, path, i_str=0):
     """This will stage, commit, and push branch_name in
     repo_path to it's origin with commit_desc.
 
@@ -40,19 +40,35 @@ def push_repo(branch_name, repo_path, commit_desc):
         repo_path   -- Path to the git repo we're working with.
         commit_desc -- A description for the commit.
     """
-    print("Staging all changes...")
+    stge_msg = ""
+    cmt_msg = ""
+    psh_msg = ""
+    fin_msg = ""
+
+    if (i_str == 0):
+        stge_msg = "Staging all changes..."
+        cmt_msg = "Committing staged changes..."
+        psh_msg = "Pushing to origin..."
+        fin_msg = "Done!"
+    else:
+        stge_msg = f"Staging all changes for the {i_str} repo..."
+        cmt_msg = f"Committing staged changes for the {i_str} repo..."
+        psh_msg = f"Pushing the {i_str} repo to origin..."
+        fin_msg = f"Done with {i_str} repo!"
+
+    print()
+    print(stge_msg)
     args = [GIT, ADD, "-A"]
-    subprocess.call(args, cwd=repo_path)
-
-    print("Committing staged changes...")
+    subprocess.call(args, cwd=path)
+    print()
+    print(cmt_msg)
     args = [GIT, COMMIT, "-a", "-m", commit_desc]
-    subprocess.call(args, cwd=repo_path)
-
-    print("Pushing to origin...")
-    args = [GIT, PUSH, ORIGIN, branch_name]
-    subprocess.call(args, cwd=repo_path)
-
-    print("Done!")
+    subprocess.call(args, cwd=path)
+    print()
+    print(psh_msg)
+    args = [GIT, PUSH, ORIGIN, branch]
+    subprocess.call(args, cwd=path)
+    print(fin_msg)
 
 
 def push_repos(branch_names, path_list, commit_desc):
@@ -66,7 +82,6 @@ def push_repos(branch_names, path_list, commit_desc):
     """
     print()
     print(f"Commit Description: {commit_desc}")
-    print("Beginning repo iteration...")
     for i, (branch, path) in enumerate(zip(branch_names, path_list), start=1):
         i_mod = ""
 
@@ -81,20 +96,8 @@ def push_repos(branch_names, path_list, commit_desc):
 
         i_str = f"{i}{i_mod}"
 
-        print()
-        print(f"Staging all changes for the {i_str} repo...")
-        args = [GIT, ADD, "-A"]
-        subprocess.call(args, cwd=path)
-
-        print()
-        print(f"Committing staged changes for the {i_str} repo...")
-        args = [GIT, COMMIT, "-a", "-m", commit_desc]
-        subprocess.call(args, cwd=path)
-
-        print()
-        print(f"Pushing the {i_str} repo to origin...")
-        args = [GIT, PUSH, ORIGIN, branch]
-        subprocess.call(args, cwd=path)
+        print("Beginning repo iteration...")
+        stage_commit_push(commit_desc, branch, path, i_str)
     else:
         print()
         print("All repos have been staged, committed, and pushed!")
@@ -105,11 +108,12 @@ if __name__ == "__main__":
 
     if len(cmd) > 1:
         if len(cmd) < 5:
-            push_repo(cmd[1], os.path.normcase(cmd[2]), cmd[3])
+            stage_commit_push(cmd[1], os.path.normcase(cmd[2]), cmd[3])
         else:
             print("Too many args. Expected: 3 args")
     else:
         repo_paths = get_local_repo_paths()
+
         # For testing, assume all branch names will be "master"
         branch_names = ["master"] * len(repo_paths)
 
