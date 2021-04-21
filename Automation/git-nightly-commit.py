@@ -26,7 +26,7 @@ def get_local_repo_paths():
         sub_paths = get_immediate_sub_dirs(path)
 
         for sub_path in sub_paths:
-            if sub_path == ".git":
+            if sub_path == REPO_EXT:
                 repo_paths.append(f"{os.getcwd()}\\{path}")
 
     return repo_paths
