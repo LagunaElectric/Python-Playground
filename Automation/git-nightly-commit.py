@@ -14,32 +14,47 @@ PULL = "pull"
 ORIGIN = "origin"
 
 
+def get_immediate_sub_dirs(path):
+    return next(os.walk(path))[1]
+
+
 def get_local_repo_paths():
-    # Grab a list of subdirs immediately inside the current working dir.
-    paths = next(os.walk(os.getcwd()))[1]
+    paths = get_immediate_sub_dirs(os.getcwd())
     repo_paths = []
 
     for path in paths:
-        # Grab a list of subdirectories immediately inside the given path.
-        sub_paths = next(os.walk(path))[1]
+        sub_paths = get_immediate_sub_dirs(path)
+
         for sub_path in sub_paths:
             if sub_path == ".git":
-                # This will find all dirs that contain .git folders
-                # and add them to the repo_paths list.
                 repo_paths.append(f"{os.getcwd()}\\{path}")
 
     return repo_paths
 
 
-def stage_commit_push(commit_desc, branch, path, i_str=0):
-    """This will stage, commit, and push branch_name in
-    repo_path to it's origin with commit_desc.
+def call_git_command(print_message, git_args, path):
+    print()
+    print(print_message)
+    args = [GIT]
+    args += git_args
+    subprocess.call(args, cwd=path)
 
-    Arguments:
-        branch_name -- Name of the branch we're working with.
-        repo_path   -- Path to the git repo we're working with.
-        commit_desc -- A description for the commit.
-    """
+
+def build_index_string(i):
+    i_mod = ""
+    if i == 1:
+        i_mod = "st"
+    elif i == 2:
+        i_mod = "nd"
+    elif i == 3:
+        i_mod = "rd"
+    else:
+        i_mod = "th"
+    i_str = f"{i}{i_mod}"
+    return i_str
+
+
+def stage_commit_push(commit_desc, branch, path, i_str=0):
     stge_msg = ""
     cmt_msg = ""
     psh_msg = ""
@@ -56,48 +71,26 @@ def stage_commit_push(commit_desc, branch, path, i_str=0):
         psh_msg = f"Pushing the {i_str} repo to origin..."
         fin_msg = f"Done with {i_str} repo!"
 
-    print()
-    print(stge_msg)
-    args = [GIT, ADD, "-A"]
-    subprocess.call(args, cwd=path)
-    print()
-    print(cmt_msg)
-    args = [GIT, COMMIT, "-a", "-m", commit_desc]
-    subprocess.call(args, cwd=path)
-    print()
-    print(psh_msg)
-    args = [GIT, PUSH, ORIGIN, branch]
-    subprocess.call(args, cwd=path)
+    args = [ADD, "-A"]
+    call_git_command(stge_msg, args, path)
+
+    args = [COMMIT, "-a", "-m", commit_desc]
+    call_git_command(cmt_msg, args, path)
+
+    args = [PUSH, ORIGIN, branch]
+    call_git_command(psh_msg, args, path)
+
     print(fin_msg)
 
 
-def push_repos(branch_names, path_list, commit_desc):
-    """This will stage, commit, and push multiple repos to their
-    origins.
-
-    Arguments:
-        branch_names -- List of branch names.
-        path_list    -- List of repo paths.
-        commit_desc  -- Commit description. Will be used for all repos.
-    """
+def push_multiple_repos(branch_names, path_list, commit_desc):
     print()
     print(f"Commit Description: {commit_desc}")
     for i, (branch, path) in enumerate(zip(branch_names, path_list), start=1):
-        i_mod = ""
-
-        if i == 1:
-            i_mod = "st"
-        elif i == 2:
-            i_mod = "nd"
-        elif i == 3:
-            i_mod = "rd"
-        else:
-            i_mod = "th"
-
-        i_str = f"{i}{i_mod}"
+        index_string = build_index_string(i)
 
         print("Beginning repo iteration...")
-        stage_commit_push(commit_desc, branch, path, i_str)
+        stage_commit_push(commit_desc, branch, path, index_string)
     else:
         print()
         print("All repos have been staged, committed, and pushed!")
@@ -118,4 +111,4 @@ if __name__ == "__main__":
         branch_names = ["master"] * len(repo_paths)
 
         print(branch_names, repo_paths)
-        push_repos(branch_names, repo_paths, "Test Message")
+        push_multiple_repos(branch_names, repo_paths, "Test Message")
