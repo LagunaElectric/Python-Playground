@@ -21,14 +21,11 @@ def get_immediate_sub_dirs(path):
 def get_local_repo_paths():
     paths = get_immediate_sub_dirs(os.getcwd())
     repo_paths = []
-
     for path in paths:
         sub_paths = get_immediate_sub_dirs(path)
-
         for sub_path in sub_paths:
             if sub_path == REPO_EXT:
                 repo_paths.append(f"{os.getcwd()}\\{path}")
-
     return repo_paths
 
 
@@ -86,9 +83,9 @@ def stage_commit_push(commit_desc, branch, path, i_str=0):
 def push_multiple_repos(branch_names, path_list, commit_desc):
     print()
     print(f"Commit Description: {commit_desc}")
+    
     for i, (branch, path) in enumerate(zip(branch_names, path_list), start=1):
         index_string = build_index_string(i)
-
         print("Beginning repo iteration...")
         stage_commit_push(commit_desc, branch, path, index_string)
     else:
