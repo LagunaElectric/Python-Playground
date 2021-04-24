@@ -56,7 +56,7 @@ def stage_commit_push(
     args = [ADD, "-A"]
     call_git_command(stge_msg, args, path)
 
-    args = [COMMIT, "-a", "-m", commit_desc]
+    args = [COMMIT, "-m", commit_desc]
     call_git_command(cmt_msg, args, path)
 
     args = [PUSH, ORIGIN, branch]
