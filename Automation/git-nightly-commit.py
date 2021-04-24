@@ -14,7 +14,7 @@ PULL = "pull"
 ORIGIN = "origin"
 
 
-def get_immediate_sub_dirs(path):
+def get_immediate_sub_dirs(path: str):
     return next(os.walk(path))[1]
 
 
@@ -29,7 +29,7 @@ def get_local_repo_paths():
     return repo_paths
 
 
-def call_git_command(print_message, git_args, path):
+def call_git_command(print_message: str, git_args: list[str], path: str):
     print()
     print(print_message)
     args = [GIT, git_args]
@@ -42,7 +42,7 @@ def build_index_string(i: int) -> str:
     return f"{i}{i_mod}"
 
 
-def stage_commit_push(commit_desc: str, branch: str, path: str, i_str=""):
+def stage_commit_push(commit_desc: str, branch: str, path: str, i_str: str = ""):
     if i_str == "":
         stge_msg = "Staging all changes..."
         cmt_msg = "Committing staged changes..."
@@ -66,7 +66,9 @@ def stage_commit_push(commit_desc: str, branch: str, path: str, i_str=""):
     print(fin_msg)
 
 
-def push_multiple_repos(branch_names, path_list, commit_desc):
+def push_multiple_repos(
+    branch_names: list[str], path_list: list[str], commit_desc: str
+):
     print()
     print(f"Commit Description: {commit_desc}")
 
