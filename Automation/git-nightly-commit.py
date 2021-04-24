@@ -3,6 +3,7 @@
 import os
 import sys
 import subprocess
+from typing import Optional
 
 # Make some constants to make our typing life a litte easier.
 REPO_EXT = ".git"
@@ -45,7 +46,7 @@ def build_index_string(i: int) -> str:
 def stage_commit_push(
     commit_desc: str, branch: str, path: str, i_str: Optional[str] = None
 ):
-    if i_str == "":
+    if i_str == None:
         stge_msg = "Staging all changes..."
         cmt_msg = "Committing staged changes..."
         psh_msg = "Pushing to origin..."
