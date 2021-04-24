@@ -50,8 +50,8 @@ class Employee(Person):
 
 
 class Manager(Employee):
-    def __init__(self, first_name="", last_name="", birth_date=date.today(), salary=0):
-        super().__init__(first_name, last_name, birth_date, salary)
+    def __init__(self, f_name="", l_name="", b_day=date.today(), salary=0):
+        super().__init__(f_name, l_name, b_day, salary)
         self.access_code = None
 
 
@@ -72,10 +72,10 @@ class BreadVault:
 
 
 class BreadBank:
-    def __init__(self, manager=Manager(), employee_list=[], accounts=[], vault=BreadVault()):
-        self.manager = manager
-        self.employees = employee_list
-        self.accounts = accounts
+    def __init__(self, mngr=Manager(), emps=[], accs=[], vault=BreadVault()):
+        self.manager = mngr
+        self.employees = emps
+        self.accounts = accs
         self.vault = vault
 
     def deposit(self, account, bread_stack=BreadStack("", 0)):
