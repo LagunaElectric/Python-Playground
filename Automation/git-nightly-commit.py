@@ -42,7 +42,9 @@ def build_index_string(i: int) -> str:
     return f"{i}{i_mod}"
 
 
-def stage_commit_push(commit_desc: str, branch: str, path: str, i_str: str = ""):
+def stage_commit_push(
+    commit_desc: str, branch: str, path: str, i_str: Optional[str] = None
+):
     if i_str == "":
         stge_msg = "Staging all changes..."
         cmt_msg = "Committing staged changes..."
