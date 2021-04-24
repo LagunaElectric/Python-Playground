@@ -15,18 +15,14 @@ PULL = "pull"
 ORIGIN = "origin"
 
 
-def get_immediate_sub_dirs(path: str):
+def get_immediate_sub_dirs(path: str) -> list[str]:
     return next(os.walk(path))[1]
 
 
-def get_local_repo_paths():
+def get_local_repo_paths() -> list[str]:
     paths = get_immediate_sub_dirs(os.getcwd())
-    repo_paths = []
-    for path in paths:
-        sub_paths = get_immediate_sub_dirs(path)
-        for sub_path in sub_paths:
-            if sub_path == REPO_EXT:
-                repo_paths.append(f"{os.getcwd()}\\{path}")
+    sub_paths = [get_immediate_sub_dirs(path) for path in paths]
+    repo_paths = [f"{os.getcwd()}\\{path}" for path in sub_paths if path == REPO_EXT]
     return repo_paths
 
 
