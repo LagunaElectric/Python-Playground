@@ -32,32 +32,18 @@ def get_local_repo_paths():
 def call_git_command(print_message, git_args, path):
     print()
     print(print_message)
-    args = [GIT]
-    args += git_args
+    args = [GIT, git_args]
     subprocess.call(args, cwd=path)
 
 
-def build_index_string(i):
-    i_mod = ""
-    if i == 1:
-        i_mod = "st"
-    elif i == 2:
-        i_mod = "nd"
-    elif i == 3:
-        i_mod = "rd"
-    else:
-        i_mod = "th"
-    i_str = f"{i}{i_mod}"
-    return i_str
+def build_index_string(i: int) -> str:
+    switch = {1: "st", 2: "nd", 3: "rd", None: "th"}
+    i_mod = switch.get(i) or switch[None]
+    return f"{i}{i_mod}"
 
 
-def stage_commit_push(commit_desc, branch, path, i_str=0):
-    stge_msg = ""
-    cmt_msg = ""
-    psh_msg = ""
-    fin_msg = ""
-
-    if (i_str == 0):
+def stage_commit_push(commit_desc: str, branch: str, path: str, i_str=""):
+    if i_str == "":
         stge_msg = "Staging all changes..."
         cmt_msg = "Committing staged changes..."
         psh_msg = "Pushing to origin..."
