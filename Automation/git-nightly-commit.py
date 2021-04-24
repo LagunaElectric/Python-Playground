@@ -84,9 +84,9 @@ def push_multiple_repos(branch_names, path_list, commit_desc):
     print()
     print(f"Commit Description: {commit_desc}")
 
+    print("Beginning repo iteration...")
     for i, (branch, path) in enumerate(zip(branch_names, path_list), start=1):
         index_string = build_index_string(i)
-        print("Beginning repo iteration...")
         stage_commit_push(commit_desc, branch, path, index_string)
     else:
         print()
