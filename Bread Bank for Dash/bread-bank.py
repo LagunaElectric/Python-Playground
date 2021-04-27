@@ -1,92 +1,45 @@
 # Bread Bank For Dash
-from datetime import date
-import uuid
-import random
-
-
+from datetime import date as d
+import uuid as u
+from random import randrange as r
 class Account:
-    def __init__(self, person, bread_stack):
-        self.client = person
-        self.bread_stack = {bread_stack.TYPE: bread_stack.amount}
-        self.id = uuid.uuid4()
-        self.creation_date = date.today()
-
-    def stack_bread(self, bread_stack):
-        type = bread_stack.TYPE
-        amount = bread_stack.amount
-        self.bread_stack[type] += amount
-
-    def __str__(self):
-        out = ""
-        out += f"Client: \n{self.client.__str__()}\n"
-        out += f"Bread Stacks: \n{str(self.bread_stack)}\n"
-        out += f"Hex ID: {self.id.hex}\n"
-        out += f"Creation Date: {self.creation_date}"
-        return out
-
-
+ __init__,stack_bread,__str__=lambda s,p,b:[
+  setattr(s,*a)for a in{'client':p,'id':u.uuid4(),
+   'bread_stack':{b.TYPE:b.amount},'creation_date':d.today()
+  }.items()][0],lambda s,b:(lambda d,e:d.__setitem__(e,d[e]+b.amount)
+ )(s.bread_stack,b.TYPE),lambda s:f"""Client:
+{s.client}
+Bread Stacks:
+{s.bread_stack}
+Hex ID: {s.id.hex}
+Creation Date: {s.creation_date}"""
 class Person:
-    def __init__(self, first_name="", last_name="", birth_date=date.today()):
-        self.first_name = first_name
-        self.last_name = last_name
-        self.birth_date = birth_date
-        self.id = uuid.uuid4()
-
-    def __str__(self):
-        out = ""
-        out += f"First Name: {self.first_name}\n"
-        out += f"Last Name: {self.last_name}\n"
-        out += f"Birthday: {self.birth_date}\n"
-        out += f"Hex ID: {self.id.hex}"
-        return out
-
-
-class Employee(Person):
-    def __init__(self, first_name, last_name, birth_date, salary):
-        super().__init__(first_name, last_name, birth_date)
-        self.salary = salary
-        self.email = None
-        self.phone_number = None
-
-
-class Manager(Employee):
-    def __init__(self, f_name="", l_name="", b_day=date.today(), salary=0):
-        super().__init__(f_name, l_name, b_day, salary)
-        self.access_code = None
-
-
-class Bread():
-    def __init__(self, type):
-        self.TYPE = type
-
-
-class BreadStack(Bread):
-    def __init__(self, type, amount=0):
-        super().__init__(type)
-        self.amount = amount
-
-
-class BreadVault:
-    def __init__(self):
-        self.balance = []
-
-
-class BreadBank:
-    def __init__(self, mngr=Manager(), emps=[], accs=[], vault=BreadVault()):
-        self.manager = mngr
-        self.employees = emps
-        self.accounts = accs
-        self.vault = vault
-
-    def deposit(self, account, bread_stack=BreadStack("", 0)):
-        self.accounts.find(account.id).stack_bread(bread_stack)
-
-
-if __name__ == "__main__":
-    bread_amt = random.randrange(25, 450)
-    salary = 50000
-    employees = [Employee("", "", date.today(), salary)] * 10
-    accounts = [Account(Person(), BreadStack("Brioche", bread_amt))]*10
-    bank = BreadBank(Manager(), employees, accounts, BreadVault())
-    print(str(bank.employees))
-    print(str(bank.accounts[0]))
+ __init__,__str__=lambda s,f="",l="",b=d.today():[setattr(s,*a)for a in{
+  'first_name':f,'surname':l,'birthday':b,'id':u.uuid4()
+ }.items()][0],lambda s:f"""First Name: {s.first_name}
+Last Name: {s.surname}
+Birthday: {s.birthday}
+Hex ID: {s.id.hex}"""
+Employee=type('Employee',(Person,),{
+ '__init__':lambda s,*a:(Person.__init__(s,*a[:-1]),
+  [setattr(s,*b)for b in{'salary':a[-1],'email':None,
+   'phone_number':None}.items()])[0]})
+Manager,Bread=type('Manager',(Employee,),{'__init__':lambda s,f="",l="",b=d.today(
+ ),a=0:Employee.__init__(s,f,l,b,a)or setattr(s,'access_code',b'808A')}),type(
+  'Bread',(),{'__init__':lambda s,t:setattr(s,'TYPE',t)})
+BreadStack=type('BreadStack',(Bread,),{'__init__':lambda s,t,a=0:(
+ Bread.__init__(s,t),setattr(s,'amount',a))[0]})
+BreadVault=type('BreadVault',(),{
+ '__init__':lambda s:setattr(s,'balance',[]),
+ '__iadd__':lambda s,n:setattr(s,'balance',s.balance+n)or s,
+ '__isub__':lambda s,n:setattr(s,'balance',s.balance-n)or s})
+BreadBank=type('BreadBank',(),{
+ '__init__':lambda s,m=Manager(),e=[],a=[],v=BreadVault():[
+  setattr(s,*a)for a in{'manager':m,'employees':e,
+   'accounts':a,'vault':v}.items()][0],'deposit':lambda s,a,b=BreadStack(
+    '',0):(lambda e:e[e.index(a.id)].stack_bread(b))(s.accounts)})
+if __name__=="__main__":
+ b=BreadBank(Manager(),[Employee("George",str(i
+  ),d.today(),50000) for i in range(10)],[Account(Person(),BreadStack(
+   "Brioche",r(25,450)))for _ in range(10)],BreadVault())
+ print(b.employees,b.accounts[0],sep='\n')
