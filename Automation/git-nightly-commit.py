@@ -1,5 +1,3 @@
-# Function to be called to stage and push a single commit.
-
 import os
 import sys
 import subprocess
@@ -22,7 +20,8 @@ def get_immediate_sub_dirs(path: str) -> list[str]:
 def get_local_repo_paths() -> list[str]:
     paths = get_immediate_sub_dirs(os.getcwd())
     sub_paths = [get_immediate_sub_dirs(path) for path in paths]
-    repo_paths = [f"{os.getcwd()}\\{path}" for path in sub_paths if path == REPO_EXT]
+    repo_paths = [
+        f"{os.getcwd()}\\{path}" for path in sub_paths if path == REPO_EXT]
     return repo_paths
 
 
